@@ -1,0 +1,46 @@
+server {
+  listen 80 ;
+
+  root /var/www/dokuwiki;
+  index index.html index.htm index.php;
+
+  server_name your.server.name;
+
+  location / {
+    # First attempt to serve request as file, then
+    # as directory, then fall back to displaying a 404.
+    try_files $uri $uri/ =404;
+  }
+
+  location ~ .php {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    # NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+  
+  # # With php5-cgi alone:
+  # fastcgi_pass 127.0.0.1:9000;
+    # With php5-fpm:
+    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_index index.php;
+    include fastcgi_params;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+  }
+
+  # deny access to .htaccess files, if Apache's document root
+  # concurs with nginx's one
+  #
+  location ~ /\.ht {
+    deny all;
+  }
+
+  # deny for dokuwiki
+  location ~ /(conf|bin|inc)/ {
+    deny all;
+  }
+
+  location ~ /data/ {
+    internal;
+  }
+}
+
+
