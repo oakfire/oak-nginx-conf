@@ -9,7 +9,7 @@ server {
     index doku.php;
 
     # Make site accessible from http://localhost/
-    server_name wiki.your-site.org ;
+    server_name your.wiki.site;
 
     #Remember to comment the below out when you're installing, and uncomment it when done.
     location ~ /(conf/|bin/|inc/|install.php) { deny all; }
@@ -37,7 +37,6 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param REDIRECT_STATUS 200;
-        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-        # fastcgi_pass unix:/var/run/php5-fpm.sock; #old php version
+        fastcgi_pass unix:/var/run/php/php-fpm.sock;
     }
 }
